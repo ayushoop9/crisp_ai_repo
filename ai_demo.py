@@ -63,37 +63,44 @@ else:
     choice = st.sidebar.radio("Navigation", ["Dashboard", "Modules", "Analytics", "Leaderboard"])
 
     if choice == "Dashboard":
-...         st.subheader("📊 Your Progress")
-...         st.progress(user['progress'] / len(modules))
-...         st.write(f"**XP:** {user['xp']} | **Level:** {user['level']}")
-...         st.write(f"**Modules Completed:** {user['progress']} / {len(modules)}")
-... 
-...     elif choice == "Modules":
-...         st.subheader("📚 Learning Modules")
-...         for mod in modules:
-...             if st.button(f"Start {mod}"):
-...                 feedback = simulate_feedback()
-...                 user['progress'] += 1
-...                 user['xp'] += feedback['score']
-...                 user['performance'][mod] = feedback
-...                 user['last_active'] = datetime.now()
-...                 if feedback['score'] > 85:
-...                     user['badges'].append(f"{mod} Expert")
-...                 st.session_state.leaderboard[st.session_state.user] = st.session_state.leaderboard.get(st.session_state.user, 0) + feedback['score']
-...                 update_competency(user)
-...                 with st.expander(f"Feedback for {mod}", expanded=True):
-...                     st.metric("Score", feedback['score'])
-...                     st.success(f"Strength: {feedback['strength']}")
-...                     st.warning(f"Improvement: {feedback['improvement']}")
-...                     st.info(f"Next Step: {feedback['next_steps']}")
-... 
-...     elif choice == "Analytics":
-...         st.subheader("📈 Your Analytics")
-...         scores = [v['score'] for v in user['performance'].values()]
-...         avg_score = sum(scores) / len(scores) if scores else 0
-...         st.write(f"Average Score: {avg_score:.2f}")
-...         st.write(f"Modules Attempted: {len(scores)}")
-...         st.write("Badges:", ", ".join(user['badges']) or "None yet")
+        st.subheader("📊 Your Progress")
+        st.progress(user['progress'] / len(modules))
+        st.write(f"**XP:** {user['xp']} | **Level:** {user['level']}")
+        st.write(f"**Modules Completed:** {user['progress']} / {len(modules)}")
+
+    elif choice == "Modules":
+        st.subheader("📚 Learning Modules")
+        for mod in modules:
+            if st.button(f"Start {mod}"):
+                feedback = simulate_feedback()
+                user['progress'] += 1
+                user['xp'] += feedback['score']
+                user['performance'][mod] = feedback
+                user['last_active'] = datetime.now()
+                if feedback['score'] > 85:
+                    user['badges'].append(f"{mod} Expert")
+                st.session_state.leaderboard[st.session_state.user] = st.session_state.leaderboard.get(st.session_state.user, 0) + feedback['score']
+                update_competency(user)
+                with st.expander(f"Feedback for {mod}", expanded=True):
+                    st.metric("Score", feedback['score'])
+                    st.success(f"Strength: {feedback['strength']}")
+                    st.warning(f"Improvement: {feedback['improvement']}")
+                    st.info(f"Next Step: {feedback['next_steps']}")
+
+    elif choice == "Analytics":
+        st.subheader("📈 Your Analytics")
+        scores = [v['score'] for v in user['performance'].values()]
+        avg_score = sum(scores) / len(scores) if scores else 0
+        st.write(f"Average Score: {avg_score:.2f}")
+        st.write(f"Modules Attempted: {len(scores)}")
+        st.write("Badges:", ", ".join(user['badges']) or "None yet")
+
+    elif choice == "Leaderboard":
+        st.subheader("🏆 Leaderboard")
+        sorted_lb = sorted(st.session_state.leaderboard.items(), key=lambda x: -x[1])
+        for i, (name, score) in enumerate(sorted_lb, 1):
+            st.write(f"{i}. {name} - {score} points")
+
 ... 
 ...     elif choice == "Leaderboard":
 ...         st.subheader("🏆 Leaderboard")
