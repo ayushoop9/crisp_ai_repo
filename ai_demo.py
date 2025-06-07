@@ -100,10 +100,3 @@ else:
         sorted_lb = sorted(st.session_state.leaderboard.items(), key=lambda x: -x[1])
         for i, (name, score) in enumerate(sorted_lb, 1):
             st.write(f"{i}. {name} - {score} points")
-
-... 
-...     elif choice == "Leaderboard":
-...         st.subheader("🏆 Leaderboard")
-...         sorted_lb = sorted(st.session_state.leaderboard.items(), key=lambda x: -x[1])
-...         for i, (name, score) in enumerate(sorted_lb, 1):
-...             st.write(f"{i}. {name} - {score} points")
